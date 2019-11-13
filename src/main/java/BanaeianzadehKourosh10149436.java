@@ -191,7 +191,6 @@ public class BanaeianzadehKourosh10149436 {
             }
         }
 
-
         private static Encoding addSlow(Encoding first, Encoding second) {
             Encoding answer = new Encoding();
             for (int i : first.indices()) {
