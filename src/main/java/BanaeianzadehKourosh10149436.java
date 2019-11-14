@@ -1,10 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -40,16 +38,8 @@ public class BanaeianzadehKourosh10149436 {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-
         BanaeianzadehKourosh10149436 algorithm = new BanaeianzadehKourosh10149436(new Scanner(new File(args[0])));
-        boolean result = algorithm.compute();
-
-        if (result) {
-            System.out.println("YES, target symbol can be formed");
-        } else {
-            System.out.println("NO, target symbol can NOT be formed");
-        }
-
+        algorithm.compute();
     }
 
     public boolean compute() {
@@ -63,7 +53,14 @@ public class BanaeianzadehKourosh10149436 {
                 compute(start, end);
             }
         }
-        return encodings[0][input.length - 1].hasTarget(target);
+
+        boolean result = encodings[0][input.length - 1].hasTarget(target);
+        if (result) {
+            System.out.println("YES, target symbol can be formed");
+        } else {
+            System.out.println("NO, target symbol can NOT be formed");
+        }
+        return result;
     }
 
     private void compute(int start, int end) {
@@ -81,18 +78,14 @@ public class BanaeianzadehKourosh10149436 {
         encodings[start][end] = answer;
     }
 
-    public void printArray() {
-        System.out.println(Arrays.stream(encodings).map(encodings1 -> "[" + Arrays.stream(encodings1).map(
-            encoding -> encoding == null ? " " : encoding.toString()).collect(Collectors.joining(",")) + "]").collect(Collectors.joining("\n")));
-    }
-
     /**
      * @author kourosh
      * @since 2019-11-06
      */
     public static class Encoding {
         public static int alphabetSize;
-        private static String[] encodingToString;
+        private static int FULL_ENCODING;
+
         private int encoding = 0;
 
         public Encoding() {
@@ -104,34 +97,11 @@ public class BanaeianzadehKourosh10149436 {
 
         public static void initialize(int alphabetSize) {
             Encoding.alphabetSize = alphabetSize;
-
-            encodingToString = new String[(int) Math.pow(2, alphabetSize)];
-            for (int encoding = 0; encoding < Math.pow(2, alphabetSize); encoding++) {
-                Encoding encodingObject = new Encoding(encoding);
-
-                StringBuilder builder = new StringBuilder();
-                for (int alphabet = 0; alphabet < alphabetSize; alphabet++) {
-                    if (encodingObject.hasTarget(alphabet)) {
-                        builder.append(alphabet).append(",");
-                    }
-                }
-                if (builder.length() > 1) {
-                    builder.deleteCharAt(builder.length() - 1);
-                }
-                builder.insert(0, "{");
-                builder.append("}");
-                encodingToString[encoding] = builder.toString();
-            }
+            FULL_ENCODING = (int) (Math.pow(2, alphabetSize) - 1);
         }
 
         public static Encoding intToEncoding(int integer) {
             return new Encoding((int) Math.pow(2, integer));
-        }
-
-        @Override
-
-        public String toString() {
-            return encodingToString[encoding];
         }
 
         public List<Integer> indices() {
@@ -146,7 +116,7 @@ public class BanaeianzadehKourosh10149436 {
         }
 
         public boolean isFull() {
-            if (encoding == Math.pow(2, alphabetSize) - 1) {
+            if (encoding == FULL_ENCODING) {
                 return true;
             } else {
                 return false;
@@ -181,7 +151,7 @@ public class BanaeianzadehKourosh10149436 {
         public static void initialize(int[][] additionRule) {
             Add.additionRule = additionRule;
 
-            int size = (int) Math.pow(2, Encoding.alphabetSize);
+            int size = Encoding.FULL_ENCODING + 1;
             additionLookup = new Encoding[size][size];
 
             for (int i = 0; i < size; i++) {
