@@ -38,8 +38,13 @@ public class BanaeianzadehKourosh10149436 {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        BanaeianzadehKourosh10149436 algorithm = new BanaeianzadehKourosh10149436(new Scanner(new File(args[0])));
-        algorithm.compute();
+        if (args.length != 1) {
+            System.out.println("USAGE: ./addition filename.in");
+        }
+        try (Scanner scanner = new Scanner(new File(args[0]))) {
+            BanaeianzadehKourosh10149436 algorithm = new BanaeianzadehKourosh10149436(scanner);
+            algorithm.compute();
+        }
     }
 
     public boolean compute() {
