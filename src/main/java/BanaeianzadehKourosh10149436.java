@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 /**
  * @author Kourosh Banaeianzadeh
  * @id 10149436
+ * CPSC Assignment 3 Bonus
  * @since 2019-11-06
  */
 public class BanaeianzadehKourosh10149436 {
@@ -17,10 +18,10 @@ public class BanaeianzadehKourosh10149436 {
     int target;
 
     public BanaeianzadehKourosh10149436(Scanner scanner) {
-        Encoding.initialize(scanner.nextInt());
+        Encoding.initialize(scanner.nextInt()); //Alphabet Size
         scanner.nextLine();
 
-        this.target = scanner.nextInt();
+        this.target = scanner.nextInt(); //Target Alphabet
         scanner.nextLine();
 
         int[][] additionRule = new int[Encoding.alphabetSize][Encoding.alphabetSize];
@@ -39,7 +40,7 @@ public class BanaeianzadehKourosh10149436 {
 
     public static void main(String[] args) throws FileNotFoundException {
         if (args.length != 1) {
-            System.out.println("USAGE: ./addition filename.in");
+            System.out.println("USAGE: java BanaeianzadehKourosh10149436 filename.in");
         }
         try (Scanner scanner = new Scanner(new File(args[0]))) {
             BanaeianzadehKourosh10149436 algorithm = new BanaeianzadehKourosh10149436(scanner);
@@ -75,7 +76,7 @@ public class BanaeianzadehKourosh10149436 {
         } else {
             for (int middle = start; middle < end; middle++) {
                 answer.addEncoding(Add.add(encodings[start][middle], encodings[middle + 1][end]));
-                if (answer.isFull()) {
+                if (answer.isFull()) { //If the encoding has all the symbols there is no point in continuing
                     break;
                 }
             }
@@ -136,7 +137,7 @@ public class BanaeianzadehKourosh10149436 {
             return encoding;
         }
 
-        public void addInt(int encoding2) {
+        public void addEncoding(int encoding2) {
             encoding = encoding | encoding2;
         }
 
@@ -156,6 +157,7 @@ public class BanaeianzadehKourosh10149436 {
         public static void initialize(int[][] additionRule) {
             Add.additionRule = additionRule;
 
+            //Create addition lookup table to instantly add encodings together
             int size = Encoding.FULL_ENCODING + 1;
             additionLookup = new Encoding[size][size];
 
@@ -170,7 +172,7 @@ public class BanaeianzadehKourosh10149436 {
             Encoding answer = new Encoding();
             for (int i : first.indices()) {
                 for (int j : second.indices()) {
-                    answer.addInt(0x1 << additionRule[i][j]);
+                    answer.addEncoding(0x1 << additionRule[i][j]);
                 }
             }
             return answer;
